@@ -1,0 +1,187 @@
+<edmx:Edmx
+    xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" Version="1.0">
+    <edmx:DataServices
+        xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="1.0">
+        <Schema
+            xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="siagro">
+            <EntityType Name="Modulo">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Codigo" Type="Edm.String" Nullable="true" MaxLength="255"/>
+                <Property Name="Descricao" Type="Edm.String" Nullable="true" MaxLength="255"/>
+                <Property Name="Id" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="Nome" Type="Edm.String" Nullable="true" MaxLength="255"/>
+            </EntityType>
+            <EntityType Name="UnidadeMedida">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Descricao" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="Id" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="Sigla" Type="Edm.String" Nullable="false" MaxLength="4"/>
+            </EntityType>
+            <EntityType Name="LocalEstoque">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Codigo" Type="Edm.String" Nullable="false" MaxLength="255"/>
+                <Property Name="Descricao" Type="Edm.String" Nullable="false" MaxLength="255"/>
+                <Property Name="Id" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="Inativo" Type="Edm.Boolean" Nullable="true"/>
+            </EntityType>
+            <EntityType Name="Municipio">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Codigo" Type="Edm.String" Nullable="false" MaxLength="7"/>
+                <Property Name="Id" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="Nome" Type="Edm.String" Nullable="false" MaxLength="100"/>
+                <Property Name="Uf" Type="Edm.Int32" Nullable="false"/>
+                <NavigationProperty Name="UfDetails" Relationship="siagro.Municipio_Uf_Many_ZeroToOne0" FromRole="Municipio" ToRole="Uf"/>
+            </EntityType>
+            <EntityType Name="Aplicativo">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="AppId" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="Codigo" Type="Edm.String" Nullable="false" MaxLength="50"/>
+                <Property Name="Descricao" Type="Edm.String" Nullable="false" MaxLength="100"/>
+                <Property Name="Id" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="Modulo" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="NomeMenu" Type="Edm.String" Nullable="false" MaxLength="100"/>
+                <Property Name="Path" Type="Edm.String" Nullable="false" MaxLength="100"/>
+                <NavigationProperty Name="ModuloDetails" Relationship="siagro.Aplicativo_Modulo_Many_ZeroToOne0" FromRole="Aplicativo" ToRole="Modulo"/>
+            </EntityType>
+            <EntityType Name="Usuario">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Id" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="NomeCompleto" Type="Edm.String" Nullable="true" MaxLength="255"/>
+                <Property Name="Senha" Type="Edm.String" Nullable="true" MaxLength="255"/>
+                <Property Name="Username" Type="Edm.String" Nullable="true" MaxLength="255"/>
+            </EntityType>
+            <EntityType Name="Uf">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Codigo" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="Id" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="Sigla" Type="Edm.String" Nullable="false" MaxLength="2"/>
+            </EntityType>
+            <EntityType Name="Produto">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Codigo" Type="Edm.String" Nullable="false" MaxLength="15"/>
+                <Property Name="Descricao" Type="Edm.String" Nullable="false" MaxLength="100"/>
+                <Property Name="Id" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="UnidadeMedida" Type="Edm.Int32" Nullable="false"/>
+                <NavigationProperty Name="UnidadeMedidaDetails" Relationship="siagro.Produto_UnidadeMedida_Many_ZeroToOne0" FromRole="Produto" ToRole="UnidadeMedida"/>
+            </EntityType>
+            <EntityType Name="SaldoEstoque">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Id" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="LocalEstoque" Type="Edm.Int32" Nullable="true"/>
+                <Property Name="Produto" Type="Edm.Int32" Nullable="true"/>
+                <Property Name="Saldo" Type="Edm.Int32" Nullable="true"/>
+                <NavigationProperty Name="LocalEstoqueDetails" Relationship="siagro.SaldoEstoque_LocalEstoque_Many_ZeroToOne0" FromRole="SaldoEstoque" ToRole="LocalEstoque"/>
+                <NavigationProperty Name="ProdutoDetails" Relationship="siagro.SaldoEstoque_Produto_Many_ZeroToOne0" FromRole="SaldoEstoque" ToRole="Produto"/>
+            </EntityType>
+            <Association Name="Municipio_Uf_Many_ZeroToOne0">
+                <End Type="siagro.Municipio" Multiplicity="*" Role="Municipio"/>
+                <End Type="siagro.Uf" Multiplicity="0..1" Role="Uf"/>
+                <ReferentialConstraint>
+                    <Principal Role="Uf">
+                        <PropertyRef Name="Id"/>
+                    </Principal>
+                    <Dependent Role="Municipio">
+                        <PropertyRef Name="Uf"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="Aplicativo_Modulo_Many_ZeroToOne0">
+                <End Type="siagro.Aplicativo" Multiplicity="*" Role="Aplicativo"/>
+                <End Type="siagro.Modulo" Multiplicity="0..1" Role="Modulo"/>
+                <ReferentialConstraint>
+                    <Principal Role="Modulo">
+                        <PropertyRef Name="Id"/>
+                    </Principal>
+                    <Dependent Role="Aplicativo">
+                        <PropertyRef Name="Modulo"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="Produto_UnidadeMedida_Many_ZeroToOne0">
+                <End Type="siagro.Produto" Multiplicity="*" Role="Produto"/>
+                <End Type="siagro.UnidadeMedida" Multiplicity="0..1" Role="UnidadeMedida"/>
+                <ReferentialConstraint>
+                    <Principal Role="UnidadeMedida">
+                        <PropertyRef Name="Id"/>
+                    </Principal>
+                    <Dependent Role="Produto">
+                        <PropertyRef Name="UnidadeMedida"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="SaldoEstoque_LocalEstoque_Many_ZeroToOne0">
+                <End Type="siagro.SaldoEstoque" Multiplicity="*" Role="SaldoEstoque"/>
+                <End Type="siagro.LocalEstoque" Multiplicity="0..1" Role="LocalEstoque"/>
+                <ReferentialConstraint>
+                    <Principal Role="LocalEstoque">
+                        <PropertyRef Name="Id"/>
+                    </Principal>
+                    <Dependent Role="SaldoEstoque">
+                        <PropertyRef Name="LocalEstoque"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <Association Name="SaldoEstoque_Produto_Many_ZeroToOne0">
+                <End Type="siagro.SaldoEstoque" Multiplicity="*" Role="SaldoEstoque"/>
+                <End Type="siagro.Produto" Multiplicity="0..1" Role="Produto"/>
+                <ReferentialConstraint>
+                    <Principal Role="Produto">
+                        <PropertyRef Name="Id"/>
+                    </Principal>
+                    <Dependent Role="SaldoEstoque">
+                        <PropertyRef Name="Produto"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="siagroContainer" m:IsDefaultEntityContainer="true">
+                <EntitySet Name="Modulos" EntityType="siagro.Modulo"/>
+                <EntitySet Name="UnidadeMedidas" EntityType="siagro.UnidadeMedida"/>
+                <EntitySet Name="LocalEstoques" EntityType="siagro.LocalEstoque"/>
+                <EntitySet Name="Municipios" EntityType="siagro.Municipio"/>
+                <EntitySet Name="Aplicativos" EntityType="siagro.Aplicativo"/>
+                <EntitySet Name="Usuarios" EntityType="siagro.Usuario"/>
+                <EntitySet Name="Ufs" EntityType="siagro.Uf"/>
+                <EntitySet Name="Produtos" EntityType="siagro.Produto"/>
+                <EntitySet Name="SaldoEstoques" EntityType="siagro.SaldoEstoque"/>
+                <AssociationSet Name="Municipio_Uf_Many_ZeroToOne0Set" Association="siagro.Municipio_Uf_Many_ZeroToOne0">
+                    <End EntitySet="Municipios" Role="Municipio"/>
+                    <End EntitySet="Ufs" Role="Uf"/>
+                </AssociationSet>
+                <AssociationSet Name="Aplicativo_Modulo_Many_ZeroToOne0Set" Association="siagro.Aplicativo_Modulo_Many_ZeroToOne0">
+                    <End EntitySet="Aplicativos" Role="Aplicativo"/>
+                    <End EntitySet="Modulos" Role="Modulo"/>
+                </AssociationSet>
+                <AssociationSet Name="Produto_UnidadeMedida_Many_ZeroToOne0Set" Association="siagro.Produto_UnidadeMedida_Many_ZeroToOne0">
+                    <End EntitySet="Produtos" Role="Produto"/>
+                    <End EntitySet="UnidadeMedidas" Role="UnidadeMedida"/>
+                </AssociationSet>
+                <AssociationSet Name="SaldoEstoque_LocalEstoque_Many_ZeroToOne0Set" Association="siagro.SaldoEstoque_LocalEstoque_Many_ZeroToOne0">
+                    <End EntitySet="SaldoEstoques" Role="SaldoEstoque"/>
+                    <End EntitySet="LocalEstoques" Role="LocalEstoque"/>
+                </AssociationSet>
+                <AssociationSet Name="SaldoEstoque_Produto_Many_ZeroToOne0Set" Association="siagro.SaldoEstoque_Produto_Many_ZeroToOne0">
+                    <End EntitySet="SaldoEstoques" Role="SaldoEstoque"/>
+                    <End EntitySet="Produtos" Role="Produto"/>
+                </AssociationSet>
+            </EntityContainer>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
