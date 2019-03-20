@@ -25,6 +25,11 @@ sap.ui.define([
 			var oDialog = this._criarDialog();
 			var oTable = this.byId("tableMunicipios");
 			var oJSONModel = this.getOwnerComponent().getModel("model");
+			var oViewModel = this.getModel("view");
+			
+			oViewModel.setData({
+				titulo: "Inserir Município",
+			});
 			
 			this._operacao = "incluir";
 			
@@ -54,6 +59,11 @@ sap.ui.define([
 			var nIndex = oTable.getSelectedIndex();
 			var oModel = this.getOwnerComponent().getModel();
 			var oJSONModel = this.getOwnerComponent().getModel("model");
+			var oViewModel = this.getModel("view");
+			
+			oViewModel.setData({
+				titulo: "Editar Município"
+			});
 			
 			this._operacao = "editar";
 			
@@ -140,6 +150,7 @@ sap.ui.define([
 		_createMunicipio: function(){
 			var oModel = this.getOwnerComponent().getModel();
 			var oJSONModel = this.getOwnerComponent().getModel("model");
+			var oViewModel = this.getModel("view"); 
 			
 			var oDados = oJSONModel.getData();
 			
@@ -151,7 +162,7 @@ sap.ui.define([
 			};
 			oModel.create("/Municipios", oDados, {
 				success: function() {
-					MessageBox.success("Dados gravados.");
+					MessageBox.success("Município inserido com sucesso!");
 					oModel.refresh(true);
 				},
 				error: function(oError) {
@@ -175,7 +186,7 @@ sap.ui.define([
 			
 			oModel.update(this._sPath, oDados, {
 				success: function(){
-					MessageBox.success("Dados gravados.");
+					MessageBox.success("Município alterado com sucesso!");
 					oModel.refresh(true);
 				},
 				error: function(oError){
@@ -203,6 +214,10 @@ sap.ui.define([
 			} else{
 				return false; 
 			}
+		},
+		
+		getModel: function(sModel){
+			return this.getOwnerComponent().getModel(sModel);
 		}
 	});
 });
