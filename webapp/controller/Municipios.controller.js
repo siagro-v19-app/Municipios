@@ -1,8 +1,9 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
-	"sap/m/MessageBox"
-], function(Controller, JSONModel, MessageBox) {
+	"sap/m/MessageBox",
+	"br/com/idxtecMunicipios/helpers/UfHelpDialog"
+], function(Controller, JSONModel, MessageBox, UfHelpDialog) {
 	"use strict";
 
 	return Controller.extend("br.com.idxtecMunicipios.controller.Municipios", {
@@ -16,9 +17,19 @@ sap.ui.define([
 			this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
 		},
 		
+		ufReceived: function() {
+			this.getView().byId("uf").setSelectedKey(this.getModel("model").getProperty("/Uf"));
+		},
+		
+		handleSearchUf: function(oEvent){
+			var sInputId = oEvent.getParameter("id");
+			UfHelpDialog.handleValueHelp(this.getView(), sInputId, this);
+		},
+		
 		onRefresh: function(e){
 			var oModel = this.getOwnerComponent().getModel();
 			oModel.refresh(true);
+			this.getView().byId("tableMunicipios").clearSelection();
 		},
 		
 		onIncluir: function(){
@@ -28,16 +39,10 @@ sap.ui.define([
 			var oViewModel = this.getModel("view");
 			
 			oViewModel.setData({
-				titulo: "Inserir Município",
+				titulo: "Inserir Município"
 			});
 			
 			this._operacao = "incluir";
-			
-			oDialog.setEscapeHandler(function(oPromise){
-				if(oJSONModel.hasPendingChanges()){
-					oJSONModel.resetChanges();
-				}
-			});
 			
 			var oNovoMunicipio = {
 				"Id": 0,
@@ -68,7 +73,7 @@ sap.ui.define([
 			this._operacao = "editar";
 			
 			if(nIndex === -1){
-				MessageBox.information("Selecione um município da tabela!");
+				MessageBox.warning("Selecione um município da tabela!");
 				return;
 			}
 			
@@ -78,9 +83,6 @@ sap.ui.define([
 			oModel.read(oContext.sPath, {
 				success: function(oData){
 					oJSONModel.setData(oData);
-				},
-				error: function(oError){
-					MessageBox.error(oError.responseText);
 				}
 			});
 			
@@ -94,7 +96,7 @@ sap.ui.define([
 			var nIndex = oTable.getSelectedIndex();
 			
 			if(nIndex === -1){
-				MessageBox.information("Selecione um município da tabela!");
+				MessageBox.warning("Selecione um município da tabela!");
 				return;
 			}
 			
@@ -116,16 +118,13 @@ sap.ui.define([
 				success: function(){
 					oModel.refresh(true);
 					oTable.clearSelection();
-				},
-				error: function(oError){
-					MessageBox.error(oError.responseText);
 				}
 			});
 		},
 		
 		onSaveDialog: function(){
 			if (this._checarCampos(this.getView())) {
-				MessageBox.information("Preencha todos os campos obrigatórios!");
+				MessageBox.warning("Preencha todos os campos obrigatórios!");
 				return;
 			}
 			if(this._operacao === "incluir"){
@@ -150,11 +149,9 @@ sap.ui.define([
 		_createMunicipio: function(){
 			var oModel = this.getOwnerComponent().getModel();
 			var oJSONModel = this.getOwnerComponent().getModel("model");
-			var oViewModel = this.getModel("view"); 
 			
 			var oDados = oJSONModel.getData();
 			
-			oDados.Uf = parseInt(oDados.Uf, 0);
 			oDados.UfDetails = {
 				__metadata: {
 					uri: "/Ufs(" + oDados.Uf + ")"
@@ -164,9 +161,6 @@ sap.ui.define([
 				success: function() {
 					MessageBox.success("Município inserido com sucesso!");
 					oModel.refresh(true);
-				},
-				error: function(oError) {
-					MessageBox.error(oError.responseText);
 				}
 			});
 		},
@@ -177,7 +171,6 @@ sap.ui.define([
 			
 			var oDados = oJSONModel.getData();
 			
-			oDados.Uf = parseInt(oDados.Uf, 0);
 			oDados.UfDetails = {
 				__metadata:{
 					uri: "/Ufs(" + oDados.Uf + ")"
@@ -188,9 +181,6 @@ sap.ui.define([
 				success: function(){
 					MessageBox.success("Município alterado com sucesso!");
 					oModel.refresh(true);
-				},
-				error: function(oError){
-					MessageBox.error(oError.responseText);
 				}
 			});
 		},

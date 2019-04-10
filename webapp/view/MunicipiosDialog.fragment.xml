@@ -6,7 +6,7 @@
 		title="{view>/titulo}"
 		class="sapUiSmallMargin">
    	
-   		<VBox id="vBoxMunicipio" class="sapUiSmallMargin">
+   		<VBox id="vBoxMunicipio" class="sapUiSmallMargin sapUiSizeCompact">
    			<Label text="Código:" labelFor="codigo"/>
 			<Input value="{model>/Codigo}" id="codigo" required="true"/>
 			
@@ -14,14 +14,23 @@
 			<Input value="{model>/Nome}" id="nome" required="true"/>
 			
 			<Label text="UF:" labelFor="uf"/>
-			<ComboBox selectedKey="{model>/Uf}"
-				items="{path: '/Ufs'}"
-				id="uf"
-				required="true">
-				<core:ListItem key="{Id}" text="{Sigla}"/>
-			</ComboBox>
+			<Input selectedKey="{path: 'model>/Uf', type: 'sap.ui.model.odata.type.Int32'}"
+				textFormatMode="KeyValue"
+				showSuggestion="true"
+				showValueHelp="true"
+				valueHelpRequest="handleSearchUf"
+				suggestionItems="{
+					path: '/Ufs',
+					events: {
+						dataReceived: '.ufReceived'
+					}
+				}"
+				id="uf">
+				<suggestionItems>
+					<core:ListItem key="{Id}" text="{Sigla}"/>
+				</suggestionItems>
+			</Input>
 		</VBox>
-   		
    		<buttons>
    			<Button text="Salvar" press="onSaveDialog"/>
    			<Button text="Fechar" press="onCloseDialog"/>
