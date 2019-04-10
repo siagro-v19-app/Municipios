@@ -12,6 +12,6 @@
 			iconDensityAware="false"
 			iconInset="false"
 			title="{Sigla}"
-			description="{Id}" />
+			description="{Id}"/>
 	</SelectDialog>
 </core:FragmentDefinition>

@@ -4,7 +4,7 @@
    <Dialog
 		id="MunicipiosDialog"
 		title="{view>/titulo}"
-		class="sapUiSmallMargin">
+		class="sapUiSmallMargin sapUiSizeCompact">
    	
    		<VBox id="vBoxMunicipio" class="sapUiSmallMargin sapUiSizeCompact">
    			<Label text="Código:" labelFor="codigo"/>
