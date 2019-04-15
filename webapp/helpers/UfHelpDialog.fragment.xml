@@ -4,7 +4,7 @@
 	<SelectDialog
 		title="UF"
 		class="sapUiPopupWithPadding sapUiSizeCompact"
-		items="{/Ufs}"
+		items="{path: '/Ufs', sorter: {path: 'Sigla'}}"
 		search="_handleValueHelpSearch"
 		confirm="_handleValueHelpClose"
 		cancel="_handleValueHelpClose">

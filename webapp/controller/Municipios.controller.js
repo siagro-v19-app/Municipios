@@ -2,8 +2,10 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageBox",
+	"sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator",
 	"br/com/idxtecMunicipios/helpers/UfHelpDialog"
-], function(Controller, JSONModel, MessageBox, UfHelpDialog) {
+], function(Controller, JSONModel, MessageBox, Filter, FilterOperator, UfHelpDialog) {
 	"use strict";
 
 	return Controller.extend("br.com.idxtecMunicipios.controller.Municipios", {
@@ -15,6 +17,17 @@ sap.ui.define([
 
 			this.getOwnerComponent().setModel(oJSONModel, "model");
 			this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
+		},
+		
+		filtraMunicipio: function(oEvent){
+			var sQuery = oEvent.getParameter("query");
+			var oFilter = new Filter("Nome", FilterOperator.Contains, sQuery);
+			
+			var aFilters = [
+				oFilter
+			];
+
+			this.getView().byId("tableMunicipios").getBinding("rows").filter(aFilters, "Application");
 		},
 		
 		ufReceived: function() {
